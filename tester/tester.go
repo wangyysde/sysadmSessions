@@ -9,33 +9,33 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-gonic/gin"
+	"github.com/wangyysde/sysadmSessions"
+	"github.com/wangyysde/sysadmServer"
 )
 
-type storeFactory func(*testing.T) sessions.Store
+type storeFactory func(*testing.T) sysadmSessions.Store
 
 const sessionName = "mysession"
 
 const ok = "ok"
 
 func init() {
-	gin.SetMode(gin.TestMode)
+	sysadmServer.SetMode(sysadmServer.TestMode)
 }
 
 func GetSet(t *testing.T, newStore storeFactory) {
-	r := gin.Default()
-	r.Use(sessions.Sessions(sessionName, newStore(t)))
+	r := sysadmServer.Default()
+	r.Use(sysadmSessions.Sessions(sessionName, newStore(t)))
 
-	r.GET("/set", func(c *gin.Context) {
-		session := sessions.Default(c)
+	r.GET("/set", func(c *sysadmServer.Context) {
+		session := sysadmSessions.Default(c)
 		session.Set("key", ok)
 		_ = session.Save()
 		c.String(http.StatusOK, ok)
 	})
 
-	r.GET("/get", func(c *gin.Context) {
-		session := sessions.Default(c)
+	r.GET("/get", func(c *sysadmServer.Context) {
+		session := sysadmSessions.Default(c)
 		if session.Get("key") != ok {
 			t.Error("Session writing failed")
 		}
@@ -54,25 +54,25 @@ func GetSet(t *testing.T, newStore storeFactory) {
 }
 
 func DeleteKey(t *testing.T, newStore storeFactory) {
-	r := gin.Default()
-	r.Use(sessions.Sessions(sessionName, newStore(t)))
+	r := sysadmServer.Default()
+	r.Use(sysadmSessions.Sessions(sessionName, newStore(t)))
 
-	r.GET("/set", func(c *gin.Context) {
-		session := sessions.Default(c)
+	r.GET("/set", func(c *sysadmServer.Context) {
+		session := sysadmSessions.Default(c)
 		session.Set("key", ok)
 		_ = session.Save()
 		c.String(http.StatusOK, ok)
 	})
 
-	r.GET("/delete", func(c *gin.Context) {
-		session := sessions.Default(c)
+	r.GET("/delete", func(c *sysadmServer.Context) {
+		session := sysadmSessions.Default(c)
 		session.Delete("key")
 		_ = session.Save()
 		c.String(http.StatusOK, ok)
 	})
 
-	r.GET("/get", func(c *gin.Context) {
-		session := sessions.Default(c)
+	r.GET("/get", func(c *sysadmServer.Context) {
+		session := sysadmSessions.Default(c)
 		if session.Get("key") != nil {
 			t.Error("Session deleting failed")
 		}
@@ -96,19 +96,19 @@ func DeleteKey(t *testing.T, newStore storeFactory) {
 }
 
 func Flashes(t *testing.T, newStore storeFactory) {
-	r := gin.Default()
+	r := sysadmServer.Default()
 	store := newStore(t)
-	r.Use(sessions.Sessions(sessionName, store))
+	r.Use(sysadmSessions.Sessions(sessionName, store))
 
-	r.GET("/set", func(c *gin.Context) {
-		session := sessions.Default(c)
+	r.GET("/set", func(c *sysadmServer.Context) {
+		session := sysadmSessions.Default(c)
 		session.AddFlash(ok)
 		_ = session.Save()
 		c.String(http.StatusOK, ok)
 	})
 
-	r.GET("/flash", func(c *gin.Context) {
-		session := sessions.Default(c)
+	r.GET("/flash", func(c *sysadmServer.Context) {
+		session := sysadmSessions.Default(c)
 		l := len(session.Flashes())
 		if l != 1 {
 			t.Error("Flashes count does not equal 1. Equals ", l)
@@ -117,8 +117,8 @@ func Flashes(t *testing.T, newStore storeFactory) {
 		c.String(http.StatusOK, ok)
 	})
 
-	r.GET("/check", func(c *gin.Context) {
-		session := sessions.Default(c)
+	r.GET("/check", func(c *sysadmServer.Context) {
+		session := sysadmSessions.Default(c)
 		l := len(session.Flashes())
 		if l != 0 {
 			t.Error("flashes count is not 0 after reading. Equals ", l)
@@ -147,12 +147,12 @@ func Clear(t *testing.T, newStore storeFactory) {
 		"key": "val",
 		"foo": "bar",
 	}
-	r := gin.Default()
+	r := sysadmServer.Default()
 	store := newStore(t)
-	r.Use(sessions.Sessions(sessionName, store))
+	r.Use(sysadmSessions.Sessions(sessionName, store))
 
-	r.GET("/set", func(c *gin.Context) {
-		session := sessions.Default(c)
+	r.GET("/set", func(c *sysadmServer.Context) {
+		session := sysadmSessions.Default(c)
 		for k, v := range data {
 			session.Set(k, v)
 		}
@@ -161,8 +161,8 @@ func Clear(t *testing.T, newStore storeFactory) {
 		c.String(http.StatusOK, ok)
 	})
 
-	r.GET("/check", func(c *gin.Context) {
-		session := sessions.Default(c)
+	r.GET("/check", func(c *sysadmServer.Context) {
+		session := sysadmSessions.Default(c)
 		for k, v := range data {
 			if session.Get(k) == v {
 				t.Fatal("Session clear failed")
@@ -183,24 +183,24 @@ func Clear(t *testing.T, newStore storeFactory) {
 }
 
 func Options(t *testing.T, newStore storeFactory) {
-	r := gin.Default()
+	r := sysadmServer.Default()
 	store := newStore(t)
-	store.Options(sessions.Options{
+	store.Options(sysadmSessions.Options{
 		Domain: "localhost",
 	})
-	r.Use(sessions.Sessions(sessionName, store))
+	r.Use(sysadmSessions.Sessions(sessionName, store))
 
-	r.GET("/domain", func(c *gin.Context) {
-		session := sessions.Default(c)
+	r.GET("/domain", func(c *sysadmServer.Context) {
+		session := sysadmSessions.Default(c)
 		session.Set("key", ok)
-		session.Options(sessions.Options{
+		session.Options(sysadmSessions.Options{
 			Path: "/foo/bar/bat",
 		})
 		_ = session.Save()
 		c.String(http.StatusOK, ok)
 	})
-	r.GET("/path", func(c *gin.Context) {
-		session := sessions.Default(c)
+	r.GET("/path", func(c *sysadmServer.Context) {
+		session := sysadmSessions.Default(c)
 		session.Set("key", ok)
 		_ = session.Save()
 		c.String(http.StatusOK, ok)
@@ -228,30 +228,30 @@ func Options(t *testing.T, newStore storeFactory) {
 }
 
 func Many(t *testing.T, newStore storeFactory) {
-	r := gin.Default()
+	r := sysadmServer.Default()
 	sessionNames := []string{"a", "b"}
 
-	r.Use(sessions.SessionsMany(sessionNames, newStore(t)))
+	r.Use(sysadmSessions.SessionsMany(sessionNames, newStore(t)))
 
-	r.GET("/set", func(c *gin.Context) {
-		sessionA := sessions.DefaultMany(c, "a")
+	r.GET("/set", func(c *sysadmServer.Context) {
+		sessionA := sysadmSessions.DefaultMany(c, "a")
 		sessionA.Set("hello", "world")
 		_ = sessionA.Save()
 
-		sessionB := sessions.DefaultMany(c, "b")
+		sessionB := sysadmSessions.DefaultMany(c, "b")
 		sessionB.Set("foo", "bar")
 		_ = sessionB.Save()
 		c.String(http.StatusOK, ok)
 	})
 
-	r.GET("/get", func(c *gin.Context) {
-		sessionA := sessions.DefaultMany(c, "a")
+	r.GET("/get", func(c *sysadmServer.Context) {
+		sessionA := sysadmSessions.DefaultMany(c, "a")
 		if sessionA.Get("hello") != "world" {
 			t.Error("Session writing failed")
 		}
 		_ = sessionA.Save()
 
-		sessionB := sessions.DefaultMany(c, "b")
+		sessionB := sysadmSessions.DefaultMany(c, "b")
 		if sessionB.Get("foo") != "bar" {
 			t.Error("Session writing failed")
 		}

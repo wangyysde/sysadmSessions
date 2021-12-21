@@ -4,14 +4,14 @@ import (
 	"testing"
 
 	"github.com/bradfitz/gomemcache/memcache"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/tester"
+	"github.com/wangyysde/sysadmSessions"
+	"github.com/wangyysde/sysadmSessions/tester"
 	"github.com/memcachier/mc"
 )
 
 const memcachedTestServer = "localhost:11211"
 
-var newStore = func(_ *testing.T) sessions.Store {
+var newStore = func(_ *testing.T) sysadmSessions.Store {
 	store := NewStore(
 		memcache.New(memcachedTestServer), "", []byte("secret"))
 	return store
@@ -41,7 +41,7 @@ func TestMemcached_SessionMany(t *testing.T) {
 	tester.Many(t, newStore)
 }
 
-var newBinaryStore = func(_ *testing.T) sessions.Store {
+var newBinaryStore = func(_ *testing.T) sysadmSessions.Store {
 	store := NewMemcacheStore(
 		mc.NewMC(memcachedTestServer, "", ""), "", []byte("secret"))
 	return store

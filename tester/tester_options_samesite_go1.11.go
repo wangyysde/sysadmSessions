@@ -8,15 +8,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-gonic/gin"
+	"github.com/wangyysde/sysadmSessions"
+	"github.com/wangyysde/sysadmServer"
 )
 
-func testOptionSameSitego(t *testing.T, r *gin.Engine) {
-	r.GET("/sameSite", func(c *gin.Context) {
-		session := sessions.Default(c)
+func testOptionSameSitego(t *testing.T, r *sysadmServer.Engine) {
+	r.GET("/sameSite", func(c *sysadmServer.Context) {
+		session := sysadmSessions.Default(c)
 		session.Set("key", ok)
-		session.Options(sessions.Options{
+		session.Options(sysadmSessions.Options{
 			SameSite: http.SameSiteStrictMode,
 		})
 		_ = session.Save()

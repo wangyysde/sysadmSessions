@@ -1,12 +1,12 @@
 package cookie
 
 import (
-	"github.com/gin-contrib/sessions"
+	"github.com/wangyysde/sysadmSessions"
 	gsessions "github.com/gorilla/sessions"
 )
 
 type Store interface {
-	sessions.Store
+	sysadmSessions.Store
 }
 
 // Keys are defined in pairs to allow key rotation, but the common case is to set a single
@@ -26,6 +26,6 @@ type store struct {
 	*gsessions.CookieStore
 }
 
-func (c *store) Options(options sessions.Options) {
+func (c *store) Options(options sysadmSessions.Options) {
 	c.CookieStore.Options = options.ToGorillaOptions()
 }

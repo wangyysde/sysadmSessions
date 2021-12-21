@@ -3,11 +3,11 @@ package postgres
 import (
 	"database/sql"
 	"github.com/antonlindstrom/pgstore"
-	"github.com/gin-contrib/sessions"
+	"github.com/wangyysde/sysadmSessions"
 )
 
 type Store interface {
-	sessions.Store
+	sysadmSessions.Store
 }
 
 type store struct {
@@ -25,6 +25,6 @@ func NewStore(db *sql.DB, keyPairs ...[]byte) (Store, error) {
 	return &store{p}, nil
 }
 
-func (s *store) Options(options sessions.Options) {
+func (s *store) Options(options sysadmSessions.Options) {
 	s.PGStore.Options = options.ToGorillaOptions()
 }

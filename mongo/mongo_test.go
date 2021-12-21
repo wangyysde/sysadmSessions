@@ -3,20 +3,20 @@ package mongo
 import (
 	"testing"
 
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/tester"
+	"github.com/wangyysde/sysadmSessions"
+	"github.com/wangyysde/sysadmSessions/tester"
 	"github.com/globalsign/mgo"
 )
 
 const mongoTestServer = "localhost:27017"
 
-var newStore = func(_ *testing.T) sessions.Store {
+var newStore = func(_ *testing.T) sysadmSessions.Store {
 	session, err := mgo.Dial(mongoTestServer)
 	if err != nil {
 		panic(err)
 	}
 
-	c := session.DB("test").C("sessions")
+	c := session.DB("test").C("sysadmSessions")
 	return NewStore(c, 3600, true, []byte("secret"))
 }
 

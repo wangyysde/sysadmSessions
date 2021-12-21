@@ -3,13 +3,13 @@ package redis
 import (
 	"testing"
 
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/tester"
+	"github.com/wangyysde/sysadmSessions"
+	"github.com/wangyysde/sysadmSessions/tester"
 )
 
 const redisTestServer = "localhost:6379"
 
-var newRedisStore = func(_ *testing.T) sessions.Store {
+var newRedisStore = func(_ *testing.T) sysadmSessions.Store {
 	store, err := NewStore(10, "tcp", redisTestServer, "", []byte("secret"))
 	if err != nil {
 		panic(err)

@@ -2,14 +2,14 @@ package postgres
 
 import (
 	"database/sql"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/tester"
+	"github.com/wangyysde/sysadmSessions"
+	"github.com/wangyysde/sysadmSessions/tester"
 	"testing"
 )
 
 const postgresTestServer = "postgres://testuser:testpw@localhost:5432/testdb?sslmode=disable"
 
-var newStore = func(_ *testing.T) sessions.Store {
+var newStore = func(_ *testing.T) sysadmSessions.Store {
 	db, err := sql.Open("postgres", postgresTestServer)
 	if err != nil {
 		panic(err)

@@ -3,11 +3,11 @@ package memstore
 import (
 	"testing"
 
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/tester"
+	"github.com/wangyysde/sysadmSessions"
+	"github.com/wangyysde/sysadmSessions/tester"
 )
 
-var newStore = func(_ *testing.T) sessions.Store {
+var newStore = func(_ *testing.T) sysadmSessions.Store {
 	store := NewStore([]byte("secret"))
 	return store
 }

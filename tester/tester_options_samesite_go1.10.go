@@ -5,9 +5,9 @@ package tester
 import (
 	"testing"
 
-	"github.com/gin-gonic/gin"
+	"github.com/wangyysde/sysadmServer"
 )
 
-func testOptionSameSitego(t *testing.T, r *gin.Engine) {
+func testOptionSameSitego(t *testing.T, r *sysadmServer.Engine) {
 	// not supported
 }

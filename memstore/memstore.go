@@ -1,12 +1,12 @@
 package memstore
 
 import (
-	"github.com/gin-contrib/sessions"
+	"github.com/wangyysde/sysadmSessions"
 	"github.com/quasoft/memstore"
 )
 
 type Store interface {
-	sessions.Store
+	sysadmSessions.Store
 }
 
 // Keys are defined in pairs to allow key rotation, but the common case is to set a single
@@ -26,6 +26,6 @@ type store struct {
 	*memstore.MemStore
 }
 
-func (c *store) Options(options sessions.Options) {
+func (c *store) Options(options sysadmSessions.Options) {
 	c.MemStore.Options = options.ToGorillaOptions()
 }

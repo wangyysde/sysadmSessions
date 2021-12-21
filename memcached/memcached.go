@@ -3,11 +3,11 @@ package memcached
 import (
 	"github.com/bradfitz/gomemcache/memcache"
 	gsm "github.com/bradleypeabody/gorilla-sessions-memcache"
-	"github.com/gin-contrib/sessions"
+	"github.com/wangyysde/sysadmSessions"
 )
 
 type Store interface {
-	sessions.Store
+	sysadmSessions.Store
 }
 
 // client: memcache client (github.com/bradfitz/gomemcache/memcache)
@@ -31,6 +31,6 @@ type store struct {
 	*gsm.MemcacheStore
 }
 
-func (c *store) Options(options sessions.Options) {
+func (c *store) Options(options sysadmSessions.Options) {
 	c.MemcacheStore.Options = options.ToGorillaOptions()
 }

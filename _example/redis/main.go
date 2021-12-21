@@ -1,18 +1,18 @@
 package main
 
 import (
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/redis"
-	"github.com/gin-gonic/gin"
+	"github.com/wangyysde/sysadmSessions"
+	"github.com/wangyysde/sysadmSessions/redis"
+	"github.com/wangyysde/sysadmServer"
 )
 
 func main() {
-	r := gin.Default()
+	r := sysadmServer.Default()
 	store, _ := redis.NewStore(10, "tcp", "localhost:6379", "", []byte("secret"))
-	r.Use(sessions.Sessions("mysession", store))
+	r.Use(sysadmSessions.Sessions("mysession", store))
 
-	r.GET("/incr", func(c *gin.Context) {
-		session := sessions.Default(c)
+	r.GET("/incr", func(c *sysadmServer.Context) {
+		session := sysadmSessions.Default(c)
 		var count int
 		v := session.Get("count")
 		if v == nil {
@@ -23,7 +23,7 @@ func main() {
 		}
 		session.Set("count", count)
 		session.Save()
-		c.JSON(200, gin.H{"count": count})
+		c.JSON(200, sysadmServer.H{"count": count})
 	})
 	r.Run(":8000")
 }

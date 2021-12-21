@@ -4,12 +4,12 @@ import (
 	"errors"
 
 	"github.com/boj/redistore"
-	"github.com/gin-contrib/sessions"
+	"github.com/wangyysde/sysadmSessions"
 	"github.com/gomodule/redigo/redis"
 )
 
 type Store interface {
-	sessions.Store
+	sysadmSessions.Store
 }
 
 // size: maximum number of idle connections.
@@ -84,6 +84,6 @@ func SetKeyPrefix(s Store, prefix string) error {
 	return nil
 }
 
-func (c *store) Options(options sessions.Options) {
+func (c *store) Options(options sysadmSessions.Options) {
 	c.RediStore.Options = options.ToGorillaOptions()
 }
