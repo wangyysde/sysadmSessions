@@ -1,6 +1,6 @@
 // +build !go1.11
 
-package sessions
+package sysadmSessions
 
 import (
 	gsessions "github.com/gorilla/sessions"
